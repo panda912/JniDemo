@@ -4,27 +4,57 @@ android {
     compileSdkVersion 27
     defaultConfig {
         applicationId "com.panda912.jnidemo"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
-                cppFlags "-frtti -fexceptions"
+                cppFlags "-std=c++11 -frtti -fexceptions"
             }
+        }
+        ndk {
+            abiFilters "armeabi"
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/libs']
         }
     }
     buildTypes {
-        release {
+        debug {
             minifyEnabled false
+            jniDebuggable true
+        }
+        release {
+            minifyEnabled true
+            jniDebuggable false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
     externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
+        ndkBuild {
+            path 'src/main/jni/Android.mk'
         }
+    }
+
+    clean {
+        doFirst {
+//            delete "${projectDir}/.externalNativeBuild"
+        }
+    }
+
+    task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
+        commandLine '/Users/sunguobao/Documents/android/android-ndk-r11c/build/ndk-build',
+                'NDK_PROJECT_PATH=build/intermediates/ndk',
+                'NDK_LIBS_OUT=libs',
+                'APP_BUILD_SCRIPT=src/main/jni/Android.mk',
+                'NDK_APPLICATION_MK=src/main/jni/Application.mk'
     }
 }
 

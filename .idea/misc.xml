@@ -97,9 +97,6 @@
       </value>
     </option>
   </component>
-  <component name="ProjectDictionaryState">
-    <dictionary name="panda" />
-  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

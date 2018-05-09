@@ -5,6 +5,9 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+# 指定输出路径
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/libs/${ANDROID_ABI})
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -17,7 +20,7 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp )
+             src/main/cpp/native-lib.cpp)
 
 # Searches for a specified prebuilt library and stores the path as a
 # variable. Because CMake includes system libraries in the search path by
@@ -35,10 +38,22 @@ find_library( # Sets the name of the path variable.
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this
 # build script, prebuilt third-party libraries, or system libraries.
-
 target_link_libraries( # Specifies the target library.
                        native-lib
 
                        # Links the target library to the log library
                        # included in the NDK.
                        ${log-lib} )
+
+
+
+add_library( stringutils
+             SHARED
+             src/main/cpp/stringutils.cpp)
+
+target_link_libraries( stringutils
+                       ${log-lib} )
+
+
+ADD_SUBDIRECTORY(src/main/cpp/bitmapblur)
+ADD_SUBDIRECTORY(src/main/cpp/blur)
