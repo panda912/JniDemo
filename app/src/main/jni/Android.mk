@@ -76,7 +76,7 @@ include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 LOCAL_MODULE := mycrypto
-LOCAL_SRC_FILES := native.cpp
+LOCAL_SRC_FILES := crypto.cpp
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/openssl/$(TARGET_ARCH_ABI)/include
 TARGET_PLATFORM := android-14
 # 静态库依赖
