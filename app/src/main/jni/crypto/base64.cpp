@@ -21,6 +21,7 @@ std::string base64::encodestring(const std::string &text) {
 
     std::string str((char *) out, tlen);
     free(out);
+    EVP_ENCODE_CTX_free(ectx);
     return str;
 }
 
@@ -38,6 +39,7 @@ std::string base64::decodestring(const std::string &text) {
 
     std::string data((char *) out, tlen);
     free(out);
+    EVP_ENCODE_CTX_free(ectx);
     return data;
 }
 
