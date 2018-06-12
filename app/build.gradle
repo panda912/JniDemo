@@ -50,7 +50,7 @@ android {
     }
 
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine '/Users/sunguobao/Documents/android/android-ndk-r11c/build/ndk-build',
+        commandLine '/Users/panda/Documents/android/android-ndk-r14b/build/ndk-build',
                 'NDK_PROJECT_PATH=build/intermediates/ndk',
                 'NDK_LIBS_OUT=libs',
                 'APP_BUILD_SCRIPT=src/main/jni/Android.mk',
