@@ -28,7 +28,15 @@ public class Crypto {
         System.loadLibrary("mycrypto");
     }
 
-    public native static String encrypt(String base64PublicKey, String content);
+    public native static String encryptRSA(String base64PublicKey, String content);
 
-    public native static String decrypt(String base64PrivateKey, String content);
+    public native static String decryptRSA(String base64PrivateKey, String content);
+
+    public native static String base64Encode(String content);
+
+    public native static String base64Decode(String content);
+
+    public native static String encryptAES(String content, String key, String iv);
+
+    public native static String decryptAES(String content, String key, String iv);
 }

@@ -2,6 +2,8 @@ package com.panda912.jnidemo.crypto;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +18,6 @@ public class CryptoActivity extends AppCompatActivity {
     private TextView tv1;
     private TextView tv2;
     private TextView tv_count;
-    private Button btn1;
-    private Button btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +28,51 @@ public class CryptoActivity extends AppCompatActivity {
         tv1 = findViewById(R.id.tv1);
         tv2 = findViewById(R.id.tv2);
         tv_count = findViewById(R.id.tv_count);
-        btn1 = findViewById(R.id.btn1);
-        btn2 = findViewById(R.id.btn2);
     }
 
     public void onEncrypt(View view) {
         String origin = et.getText().toString();
-        String s = Crypto.encrypt(Crypto.PUB_KEY, origin);
+        String s = Crypto.encryptRSA(Crypto.PUB_KEY, origin);
         tv1.setText(s);
         tv_count.setText(s.length() + "");
     }
 
     public void onDecrypt(View view) {
         String origin = tv1.getText().toString();
-        String ss = Crypto.decrypt(Crypto.PRI_KEY, origin);
+        String ss = Crypto.decryptRSA(Crypto.PRI_KEY, origin);
         tv2.setText(ss);
+    }
+
+    public void onBase64EncodeViaOpenssl(View view) {
+        String origin = et.getText().toString();
+        tv1.setText(Crypto.base64Encode(origin));
+    }
+
+    public void onBase64DecodeViaOpenssl(View view) {
+        String origin = tv1.getText().toString();
+        tv2.setText(Crypto.base64Decode(origin));
+    }
+
+    public void onBase64EncodeViaJava(View view) {
+        String origin = et.getText().toString();
+        byte[] result = Base64.encode(origin.getBytes(), Base64.DEFAULT);
+        tv1.setText(new String(result));
+    }
+
+    public void onBase64DecodeViaJava(View view) {
+        String origin = tv1.getText().toString();
+        byte[] result = Base64.decode(origin, Base64.DEFAULT);
+        tv2.setText(new String(result));
+    }
+
+    public void onEncryptAES(View view) {
+        String origin = et.getText().toString();
+        String reuslt = Crypto.encryptAES(origin, "01234567890123456789012345678901", "5012345678901234");
+        tv1.setText(reuslt);
+    }
+
+    public void onDecryptAES(View view) {
+        String origin = tv1.getText().toString();
+        tv2.setText(Crypto.decryptAES(origin, "01234567890123456789012345678901", "5012345678901234"));
     }
 }

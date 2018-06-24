@@ -2,8 +2,8 @@
 #include <iostream>
 #include "crypto/base64.h"
 #include "crypto/rsa.h"
+#include "crypto/aes.h"
 #include <android/log.h>
-
 
 using std::string;
 
@@ -13,16 +13,16 @@ using std::string;
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_panda912_jnidemo_crypto_Crypto_encrypt(JNIEnv *env, jobject thiz, jstring base64PublicKey,
-                                                jstring content) {
+Java_com_panda912_jnidemo_crypto_Crypto_encryptRSA(JNIEnv *env, jobject thiz, jstring publicKey,
+                                                   jstring content) {
     //jstring 转 char*
-    char *base64PublicKeyChars = (char *) env->GetStringUTFChars(base64PublicKey, NULL);
+    char *base64PublicKeyChars = (char *) env->GetStringUTFChars(publicKey, NULL);
     //char* 转 string
     string base64PublicKeyString = string(base64PublicKeyChars);
     //生成公钥字符串
     string generatedPublicKey = rsa::generatePublicKey(base64PublicKeyString);
     //释放
-    env->ReleaseStringUTFChars(base64PublicKey, base64PublicKeyChars);
+    env->ReleaseStringUTFChars(publicKey, base64PublicKeyChars);
     //jstring 转 char*
     char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
     //char* 转 string
@@ -46,16 +46,16 @@ Java_com_panda912_jnidemo_crypto_Crypto_encrypt(JNIEnv *env, jobject thiz, jstri
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_panda912_jnidemo_crypto_Crypto_decrypt(JNIEnv *env, jobject thiz, jstring base64PrivateKey,
-                                                jstring content) {
+Java_com_panda912_jnidemo_crypto_Crypto_decryptRSA(JNIEnv *env, jobject thiz, jstring privateKey,
+                                                   jstring content) {
     //jstring 转 char*
-    char *base64PrivateKeyChars = (char *) env->GetStringUTFChars(base64PrivateKey, NULL);
+    char *base64PrivateKeyChars = (char *) env->GetStringUTFChars(privateKey, NULL);
     //char* 转 string
     string base64PrivateKeyString = string(base64PrivateKeyChars);
     //生成密钥字符串
 //    string generatedPrivateKey = generatePrivateKey(base64PrivateKeyString);
     //释放
-    env->ReleaseStringUTFChars(base64PrivateKey, base64PrivateKeyChars);
+    env->ReleaseStringUTFChars(privateKey, base64PrivateKeyChars);
     //jstring 转 char*
     char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
     //char* 转 string
@@ -75,4 +75,65 @@ Java_com_panda912_jnidemo_crypto_Crypto_decrypt(JNIEnv *env, jobject thiz, jstri
     //string -> char* -> jstring 返回
     jstring result = env->NewStringUTF(origin.c_str());
     return result;
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_encryptAES(JNIEnv *env, jobject thiz, jstring content,
+                                                   jstring key, jstring iv) {
+    // jstring 转 char*
+    char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
+    char *keyChars = (char *) env->GetStringUTFChars(key, NULL);
+    char *ivChars = (char *) env->GetStringUTFChars(iv, NULL);
+    // encrypt
+   string result = aes::encrypt(reinterpret_cast<unsigned char *>(contentChars),
+                                reinterpret_cast<unsigned char *>(keyChars),
+                                reinterpret_cast<unsigned char *>(ivChars));
+    // 释放
+    env->ReleaseStringUTFChars(content, contentChars);
+    env->ReleaseStringUTFChars(key, keyChars);
+    env->ReleaseStringUTFChars(iv, ivChars);
+    // base64
+    string encodeResult = base64::encodestring(result);
+    return env->NewStringUTF(encodeResult.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_decryptAES(JNIEnv *env, jobject thiz, jstring content,
+                                                   jstring key, jstring iv) {
+    char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
+    char *keyChars = (char *) env->GetStringUTFChars(key, NULL);
+    char *ivChars = (char *) env->GetStringUTFChars(iv, NULL);
+    string contentString = string(contentChars);
+    string decodeString = base64::decodestring(contentString);
+    // decrypt
+    string decryptedtext = aes::decrypt((unsigned char *) decodeString.c_str(),
+                                        reinterpret_cast<unsigned char *>(keyChars),
+                                        reinterpret_cast<unsigned char *>(ivChars));
+    // 释放
+    env->ReleaseStringUTFChars(content, contentChars);
+    env->ReleaseStringUTFChars(key, keyChars);
+    env->ReleaseStringUTFChars(iv, ivChars);
+    return env->NewStringUTF(decryptedtext.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_base64Encode(JNIEnv *env, jobject thiz, jstring content) {
+    char *contentChar = (char *) env->GetStringUTFChars(content, NULL);
+    string contentString = string(contentChar);
+    env->ReleaseStringUTFChars(content, contentChar);
+    string resultString = base64::encodestring(contentString);
+    return env->NewStringUTF(resultString.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_base64Decode(JNIEnv *env, jobject thiz, jstring content) {
+    char *contentChar = (char *) env->GetStringUTFChars(content, NULL);
+    string contentString = string(contentChar);
+    env->ReleaseStringUTFChars(content, contentChar);
+    string resultString = base64::decodestring(contentString);
+    return env->NewStringUTF(resultString.c_str());
 }

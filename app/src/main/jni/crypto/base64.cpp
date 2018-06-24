@@ -1,3 +1,7 @@
+//
+// https://www.openssl.org/docs/man1.1.0/crypto/EVP_ENCODE_CTX_new.html
+//
+
 #include "base64.h"
 #include <iostream>
 #include <openssl/armeabi/include/openssl/ossl_typ.h>
@@ -6,6 +10,10 @@
 #include <openssl/armeabi/include/openssl/buffer.h>
 #include <openssl/armeabi/include/openssl/err.h>
 
+/**
+ * @param text
+ * @return
+ */
 std::string base64::encodestring(const std::string &text) {
     EVP_ENCODE_CTX* ectx = EVP_ENCODE_CTX_new();
     int size = text.size() * 2;

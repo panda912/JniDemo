@@ -78,7 +78,10 @@ include $(CLEAR_VARS)
 LOCAL_MODULE := mycrypto
 LOCAL_SRC_FILES := crypto/crypto.cpp \
                    crypto/base64.cpp \
-                   crypto/rsa.cpp
+                   crypto/rsa.cpp \
+                   crypto/aes.cpp \
+                   crypto/md5.cpp \
+                   crypto/sha1.cpp
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/openssl/$(TARGET_ARCH_ABI)/include
 TARGET_PLATFORM := android-14
 # 静态库依赖
