@@ -31,7 +31,7 @@ void handleErrors(void) {
     abort();
 }
 
-string aes::encrypt(unsigned char *plaintext, unsigned char *key, unsigned char *iv) {
+Cipher aes::encrypt(unsigned char *plaintext, unsigned char *key, unsigned char *iv) {
     EVP_CIPHER_CTX *ctx;
 
     int len;
@@ -69,18 +69,18 @@ string aes::encrypt(unsigned char *plaintext, unsigned char *key, unsigned char 
     EVP_CIPHER_CTX_free(ctx);
     std::string result((char *) ciphertext, ciphertext_len);
     LOGE("aes:%s", result.c_str());
-    return result;
+
+    Cipher cipher_struct;
+    cipher_struct.cipher_text = result;
+    cipher_struct.cipher_text_len = ciphertext_len;
+    return cipher_struct;
 }
 
-string aes::decrypt(unsigned char *ciphertext, unsigned char *key, unsigned char *iv) {
+string aes::decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key, unsigned char *iv) {
     EVP_CIPHER_CTX *ctx;
 
     int len;
     int plaintext_len;
-    int ciphertext_len = strlen((char *) ciphertext);
-    ciphertext_len = ciphertext_len % AES_BLOCK_SIZE == 0
-                     ? ciphertext_len : (ciphertext_len / AES_BLOCK_SIZE + 1) * AES_BLOCK_SIZE;
-    LOGE("ciphertext_len: %d", ciphertext_len);
     unsigned char plaintext[ciphertext_len];
 
     /* Create and initialise the context */

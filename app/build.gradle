@@ -50,7 +50,7 @@ android {
     }
 
     task ndkBuild(type: Exec, description: 'Compile JNI source via NDK') {
-        commandLine '/Users/panda/Documents/android/android-ndk-r14b/build/ndk-build',
+        commandLine '/home/panda/Documents/Android/android-ndk-r14b/build/ndk-build',
                 'NDK_PROJECT_PATH=build/intermediates/ndk',
                 'NDK_LIBS_OUT=libs',
                 'APP_BUILD_SCRIPT=src/main/jni/Android.mk',
@@ -61,7 +61,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

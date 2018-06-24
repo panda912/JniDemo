@@ -78,44 +78,57 @@ Java_com_panda912_jnidemo_crypto_Crypto_decryptRSA(JNIEnv *env, jobject thiz, js
 }
 
 extern "C"
-JNIEXPORT jstring JNICALL
-Java_com_panda912_jnidemo_crypto_Crypto_encryptAES(JNIEnv *env, jobject thiz, jstring content,
+JNIEXPORT jobject JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_encryptAES(JNIEnv *env, jobject thiz, jstring plainText,
                                                    jstring key, jstring iv) {
     // jstring 转 char*
-    char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
+    char *plainTextChars = (char *) env->GetStringUTFChars(plainText, NULL);
     char *keyChars = (char *) env->GetStringUTFChars(key, NULL);
     char *ivChars = (char *) env->GetStringUTFChars(iv, NULL);
     // encrypt
-   string result = aes::encrypt(reinterpret_cast<unsigned char *>(contentChars),
+   Cipher cipher = aes::encrypt(reinterpret_cast<unsigned char *>(plainTextChars),
                                 reinterpret_cast<unsigned char *>(keyChars),
                                 reinterpret_cast<unsigned char *>(ivChars));
     // 释放
-    env->ReleaseStringUTFChars(content, contentChars);
+    env->ReleaseStringUTFChars(plainText, plainTextChars);
     env->ReleaseStringUTFChars(key, keyChars);
     env->ReleaseStringUTFChars(iv, ivChars);
     // base64
-    string encodeResult = base64::encodestring(result);
-    return env->NewStringUTF(encodeResult.c_str());
+    string cipherText = base64::encodestring(cipher.cipher_text);
+
+    jclass jClassCipher = env->FindClass("com/panda912/jnidemo/crypto/Crypto$Cipher");
+    jfieldID jFieldCipherText = env->GetFieldID(jClassCipher, "cipherText", "Ljava/lang/String;");
+    jfieldID jFieldCipherTextLength = env->GetFieldID(jClassCipher, "cipherTextLength", "I");
+    jobject jCipher = env->AllocObject(jClassCipher);
+    env->SetObjectField(jCipher, jFieldCipherText, env->NewStringUTF(cipherText.c_str()));
+    env->SetIntField(jCipher, jFieldCipherTextLength, cipher.cipher_text_len);
+    return jCipher;
 }
 
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_panda912_jnidemo_crypto_Crypto_decryptAES(JNIEnv *env, jobject thiz, jstring content,
+Java_com_panda912_jnidemo_crypto_Crypto_decryptAES(JNIEnv *env, jobject thiz, jobject cipher,
                                                    jstring key, jstring iv) {
-    char *contentChars = (char *) env->GetStringUTFChars(content, NULL);
+    jclass jClassCipher = env->FindClass("com/panda912/jnidemo/crypto/Crypto$Cipher");
+    jfieldID jFieldCipherText = env->GetFieldID(jClassCipher, "cipherText", "Ljava/lang/String;");
+    jfieldID jFieldCipherTextLength = env->GetFieldID(jClassCipher, "cipherTextLength", "I");
+    jstring cipherText = (jstring) env->GetObjectField(cipher, jFieldCipherText);
+    jint cipherTextLength = env->GetIntField(cipher, jFieldCipherTextLength);
+
+    char *cipherTextChars = (char *) env->GetStringUTFChars(cipherText, NULL);
     char *keyChars = (char *) env->GetStringUTFChars(key, NULL);
     char *ivChars = (char *) env->GetStringUTFChars(iv, NULL);
-    string contentString = string(contentChars);
-    string decodeString = base64::decodestring(contentString);
+    string cipherTextString = string(cipherTextChars);
+    string decodeString = base64::decodestring(cipherTextString);
     // decrypt
-    string decryptedtext = aes::decrypt((unsigned char *) decodeString.c_str(),
+    string plainText = aes::decrypt((unsigned char *) decodeString.c_str(), cipherTextLength,
                                         reinterpret_cast<unsigned char *>(keyChars),
                                         reinterpret_cast<unsigned char *>(ivChars));
     // 释放
-    env->ReleaseStringUTFChars(content, contentChars);
+    env->ReleaseStringUTFChars(cipherText, cipherTextChars);
     env->ReleaseStringUTFChars(key, keyChars);
     env->ReleaseStringUTFChars(iv, ivChars);
-    return env->NewStringUTF(decryptedtext.c_str());
+    return env->NewStringUTF(plainText.c_str());
 }
 
 extern "C"

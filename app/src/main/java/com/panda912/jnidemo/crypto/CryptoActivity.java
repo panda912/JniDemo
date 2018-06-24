@@ -19,6 +19,8 @@ public class CryptoActivity extends AppCompatActivity {
     private TextView tv2;
     private TextView tv_count;
 
+    Crypto.Cipher reuslt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,12 +69,16 @@ public class CryptoActivity extends AppCompatActivity {
 
     public void onEncryptAES(View view) {
         String origin = et.getText().toString();
-        String reuslt = Crypto.encryptAES(origin, "01234567890123456789012345678901", "5012345678901234");
-        tv1.setText(reuslt);
+        reuslt = Crypto.encryptAES(origin, "01234567890123456789012345678901", "5012345678901234");
+        tv1.setText(reuslt.cipherText);
     }
 
     public void onDecryptAES(View view) {
         String origin = tv1.getText().toString();
-        tv2.setText(Crypto.decryptAES(origin, "01234567890123456789012345678901", "5012345678901234"));
+        Crypto.Cipher cipher = new Crypto().new Cipher();
+        cipher.cipherText = origin;
+        cipher.cipherTextLength = reuslt.cipherTextLength;
+
+        tv2.setText(Crypto.decryptAES(cipher, "01234567890123456789012345678901", "5012345678901234"));
     }
 }
