@@ -62,13 +62,9 @@ Cipher aes::encrypt(unsigned char *plaintext, unsigned char *key, unsigned char 
     }
     ciphertext_len += len;
 
-    LOGE("encrypt ciphertext_len:%d, strlen: %d, sizeof: %d", ciphertext_len,
-         strlen((const char *) ciphertext),
-         sizeof(ciphertext));
     /* Clean up */
     EVP_CIPHER_CTX_free(ctx);
     std::string result((char *) ciphertext, ciphertext_len);
-    LOGE("aes:%s", result.c_str());
 
     Cipher cipher_struct;
     cipher_struct.cipher_text = result;
@@ -111,15 +107,11 @@ string aes::decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char
      */
     if (1 != EVP_DecryptFinal_ex(ctx, plaintext + len, &len)) {
         EVP_CIPHER_CTX_cleanup(ctx);
-        LOGE("=====<<<<");
         handleErrors();
     }
     plaintext_len += len;
 
     plaintext[plaintext_len] = '\0';
-
-    LOGE("plaintext1------>%s", plaintext);
-    LOGE("plaintext_len:%d", plaintext_len);
 
     /* Clean up */
     EVP_CIPHER_CTX_free(ctx);
