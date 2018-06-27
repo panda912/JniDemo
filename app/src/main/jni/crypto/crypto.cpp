@@ -1,8 +1,9 @@
 #include "jni.h"
 #include <iostream>
-#include "crypto/base64.h"
 #include "crypto/rsa.h"
 #include "crypto/aes.h"
+#include "crypto/base64.h"
+#include "crypto/digest.h"
 #include <android/log.h>
 
 using std::string;
@@ -86,9 +87,9 @@ Java_com_panda912_jnidemo_crypto_Crypto_encryptAES(JNIEnv *env, jobject thiz, js
     char *keyChars = (char *) env->GetStringUTFChars(key, NULL);
     char *ivChars = (char *) env->GetStringUTFChars(iv, NULL);
     // encrypt
-   Cipher cipher = aes::encrypt(reinterpret_cast<unsigned char *>(plainTextChars),
-                                reinterpret_cast<unsigned char *>(keyChars),
-                                reinterpret_cast<unsigned char *>(ivChars));
+    Cipher cipher = aes::encrypt(reinterpret_cast<unsigned char *>(plainTextChars),
+                                 reinterpret_cast<unsigned char *>(keyChars),
+                                 reinterpret_cast<unsigned char *>(ivChars));
     // 释放
     env->ReleaseStringUTFChars(plainText, plainTextChars);
     env->ReleaseStringUTFChars(key, keyChars);
@@ -122,8 +123,8 @@ Java_com_panda912_jnidemo_crypto_Crypto_decryptAES(JNIEnv *env, jobject thiz, jo
     string decodeString = base64::decodestring(cipherTextString);
     // decrypt
     string plainText = aes::decrypt((unsigned char *) decodeString.c_str(), cipherTextLength,
-                                        reinterpret_cast<unsigned char *>(keyChars),
-                                        reinterpret_cast<unsigned char *>(ivChars));
+                                    reinterpret_cast<unsigned char *>(keyChars),
+                                    reinterpret_cast<unsigned char *>(ivChars));
     // 释放
     env->ReleaseStringUTFChars(cipherText, cipherTextChars);
     env->ReleaseStringUTFChars(key, keyChars);
@@ -149,4 +150,16 @@ Java_com_panda912_jnidemo_crypto_Crypto_base64Decode(JNIEnv *env, jobject thiz, 
     env->ReleaseStringUTFChars(content, contentChar);
     string resultString = base64::decodestring(contentString);
     return env->NewStringUTF(resultString.c_str());
+}
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_digest(JNIEnv *env, jobject thiz, jstring message,
+                                               jstring type) {
+    char *msgChar = (char *) env->GetStringUTFChars(message, NULL);
+    char *typeChar = (char *) env->GetStringUTFChars(type, NULL);
+    char *result = digest(msgChar, typeChar);
+    env->ReleaseStringUTFChars(message, msgChar);
+    env->ReleaseStringUTFChars(type, typeChar);
+    return env->NewStringUTF(result);
 }

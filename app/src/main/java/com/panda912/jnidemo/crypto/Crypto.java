@@ -37,11 +37,13 @@ public class Crypto {
 
     public native static String decryptRSA(String base64PrivateKey, String content);
 
+    public native static Cipher encryptAES(String plainText, String key, String iv);
+
+    public native static String decryptAES(Cipher cipher, String key, String iv);
+
     public native static String base64Encode(String content);
 
     public native static String base64Decode(String content);
 
-    public native static Cipher encryptAES(String plainText, String key, String iv);
-
-    public native static String decryptAES(Cipher cipher, String key, String iv);
+    public native static String digest(String message, String type);
 }

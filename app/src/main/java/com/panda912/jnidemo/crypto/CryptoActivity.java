@@ -81,4 +81,8 @@ public class CryptoActivity extends AppCompatActivity {
 
         tv2.setText(Crypto.decryptAES(cipher, "01234567890123456789012345678901", "5012345678901234"));
     }
+
+    public void digest(View view) {
+        tv1.setText(Crypto.digest(et.getText().toString(), "sha512"));
+    }
 }
