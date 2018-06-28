@@ -46,4 +46,6 @@ public class Crypto {
     public native static String base64Decode(String content);
 
     public native static String digest(String message, String type);
+
+    public native static String digestFile(String filePath, String type);
 }

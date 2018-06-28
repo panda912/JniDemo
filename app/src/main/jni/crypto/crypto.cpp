@@ -163,3 +163,15 @@ Java_com_panda912_jnidemo_crypto_Crypto_digest(JNIEnv *env, jobject thiz, jstrin
     env->ReleaseStringUTFChars(type, typeChar);
     return env->NewStringUTF(result.c_str());
 }
+
+extern "C"
+JNIEXPORT jstring JNICALL
+Java_com_panda912_jnidemo_crypto_Crypto_digestFile(JNIEnv *env, jobject thiz, jstring filePath,
+                                               jstring type) {
+    char *filePathChar = (char *) env->GetStringUTFChars(filePath, NULL);
+    char *typeChar = (char *) env->GetStringUTFChars(type, NULL);
+    string result = mydigest::calcFileDigest(filePathChar, typeChar);
+    env->ReleaseStringUTFChars(filePath, filePathChar);
+    env->ReleaseStringUTFChars(type, typeChar);
+    return env->NewStringUTF(result.c_str());
+}

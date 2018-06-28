@@ -1,6 +1,7 @@
 package com.panda912.jnidemo.crypto;
 
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.panda912.jnidemo.R;
+
+import java.io.File;
 
 public class CryptoActivity extends AppCompatActivity {
     private static final String TAG = "CryptoActivity";
@@ -109,5 +112,9 @@ public class CryptoActivity extends AppCompatActivity {
             }
         }
         tv1.setText(Crypto.digest(et.getText().toString(), "sha512"));
+    }
+
+    public void digestFile(View view) {
+        tv1.setText(Crypto.digestFile(Environment.getExternalStorageDirectory() + File.separator + "abc.db", "sha512"));
     }
 }

@@ -111,6 +111,13 @@
                 android:onClick="digest"
                 android:text="digest" />
 
+            <Button
+                android:id="@+id/btn10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="digestFile"
+                android:text="digest file" />
+
         </LinearLayout>
 
     </ScrollView>
