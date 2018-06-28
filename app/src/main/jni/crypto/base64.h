@@ -6,23 +6,24 @@
 #define JNIDEMO_BASE64_H
 
 #include <string>
+using namespace std;
 
 class base64 {
 
 public:
-    static std::string encode(const std::string &decoded_bytes, size_t decoded_length);
+    static string encode(const string &decoded_bytes, size_t decoded_length);
 
-    static std::string decode(const std::string &encoded_bytes, int *decoded_length);
+    static string decode(const string &encoded_bytes, int *decoded_length);
 
-    static std::string encode(const std::string &decoded_bytes);
+    static string encode(const string &decoded_bytes);
 
-    static std::string decode(const std::string &encoded_bytes);
+    static string decode(const string &encoded_bytes);
 
-    static std::string encodestring(const std::string &text);
+    static string encodestring(const string &text);
 
-    static std::string decodestring(const std::string &text);
+    static string decodestring(const string &text);
 
-    static std::string encode_hex(const std::string &src_str);
+    static string encode_hex(const string &src_str);
 };
 
 #endif //JNIDEMO_BASE64_H

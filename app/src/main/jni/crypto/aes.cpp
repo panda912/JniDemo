@@ -12,8 +12,6 @@
 #include <openssl/err.h>
 #include <string.h>
 
-using std::string;
-
 #define LOG_TAG "AES"
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
@@ -64,7 +62,7 @@ Cipher aes::encrypt(unsigned char *plaintext, unsigned char *key, unsigned char 
 
     /* Clean up */
     EVP_CIPHER_CTX_free(ctx);
-    std::string result((char *) ciphertext, ciphertext_len);
+    string result((char *) ciphertext, ciphertext_len);
 
     Cipher cipher_struct;
     cipher_struct.cipher_text = result;
@@ -115,6 +113,6 @@ string aes::decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char
 
     /* Clean up */
     EVP_CIPHER_CTX_free(ctx);
-    std::string result((char *) plaintext, plaintext_len);
+    string result((char *) plaintext, plaintext_len);
     return result;
 }

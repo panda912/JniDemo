@@ -3,7 +3,7 @@
 #include "crypto/rsa.h"
 #include "crypto/aes.h"
 #include "crypto/base64.h"
-#include "crypto/digest.h"
+#include "crypto/mydigest.h"
 #include <android/log.h>
 
 using std::string;
@@ -158,8 +158,8 @@ Java_com_panda912_jnidemo_crypto_Crypto_digest(JNIEnv *env, jobject thiz, jstrin
                                                jstring type) {
     char *msgChar = (char *) env->GetStringUTFChars(message, NULL);
     char *typeChar = (char *) env->GetStringUTFChars(type, NULL);
-    char *result = digest(msgChar, typeChar);
+    string result = mydigest::calcDigest(msgChar, typeChar);
     env->ReleaseStringUTFChars(message, msgChar);
     env->ReleaseStringUTFChars(type, typeChar);
-    return env->NewStringUTF(result);
+    return env->NewStringUTF(result.c_str());
 }

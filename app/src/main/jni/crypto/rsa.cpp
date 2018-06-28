@@ -15,8 +15,8 @@
  * @param base64EncodedKey
  * @return
  */
-std::string rsa::generatePublicKey(std::string base64EncodedKey) {
-    std::string publicKey = base64EncodedKey;
+string rsa::generatePublicKey(string base64EncodedKey) {
+    string publicKey = base64EncodedKey;
     size_t base64Length = 64;//每64个字符一行
     size_t publicKeyLength = base64EncodedKey.size();
     for (size_t i = base64Length; i < publicKeyLength; i += base64Length) {
@@ -38,8 +38,8 @@ std::string rsa::generatePublicKey(std::string base64EncodedKey) {
  * @param base64EncodedKey
  * @return
  */
-std::string rsa::generatePrivateKey(std::string base64EncodedKey) {
-    std::string privateKey = base64EncodedKey;
+string rsa::generatePrivateKey(string base64EncodedKey) {
+    string privateKey = base64EncodedKey;
     size_t base64Length = 64;//每64个字符一行
     size_t privateKeyLength = base64EncodedKey.size();
     for (size_t i = base64Length; i < privateKeyLength; i += base64Length) {
@@ -62,7 +62,7 @@ std::string rsa::generatePrivateKey(std::string base64EncodedKey) {
  * @param from
  * @return
  */
-std::string rsa::encryptRSA(const std::string &publicKey, const std::string &from) {
+string rsa::encryptRSA(const string &publicKey, const string &from) {
     BIO *bio = NULL;
     RSA *rsa_public_key = NULL;
     //从字符串读取RSA公钥串
@@ -100,7 +100,7 @@ std::string rsa::encryptRSA(const std::string &publicKey, const std::string &fro
         return "";
     }
     //赋值密文
-    std::string result(to, status);
+    string result(to, status);
     //资源释放
     free(to);
     BIO_free_all(bio);
@@ -116,12 +116,12 @@ std::string rsa::encryptRSA(const std::string &publicKey, const std::string &fro
  * @param from
  * @return
  */
-std::string rsa::decryptRSA(const std::string &privetaKey, const std::string &from) {
+string rsa::decryptRSA(const string &privetaKey, const string &from) {
     BIO *bio = NULL;
     RSA *rsa_private_key = NULL;
     //从字符串读取RSA公钥串
     if ((bio = BIO_new_mem_buf((void *) PRIVATE_KEY, -1)) == NULL) {
-        std::cout << "BIO_new_mem_buf failed!" << std::endl;
+        cout << "BIO_new_mem_buf failed!" << endl;
         return "";
     }
     //读取私钥
@@ -158,7 +158,7 @@ std::string rsa::decryptRSA(const std::string &privetaKey, const std::string &fr
         return "";
     }
     //赋值明文，是否需要指定to的长度？
-    std::string result(to, status);
+    string result(to, status);
     //释放资源
     free(to);
     BIO_free_all(bio);

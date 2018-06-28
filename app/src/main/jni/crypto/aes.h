@@ -6,9 +6,10 @@
 #define JNIDEMO_AES_H
 
 #include <string>
+using namespace std;
 
 struct Cipher {
-    std::string cipher_text;
+    string cipher_text;
     int cipher_text_len;
 };
 
@@ -16,7 +17,7 @@ class aes {
 public:
     static Cipher encrypt(unsigned char *plaintext, unsigned char *key, unsigned char *iv);
 
-    static std::string decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key, unsigned char *iv);
+    static string decrypt(unsigned char *ciphertext, int ciphertext_len, unsigned char *key, unsigned char *iv);
 };
 
 #endif //JNIDEMO_AES_H

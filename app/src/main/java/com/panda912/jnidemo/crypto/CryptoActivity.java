@@ -78,11 +78,36 @@ public class CryptoActivity extends AppCompatActivity {
         Crypto.Cipher cipher = new Crypto().new Cipher();
         cipher.cipherText = origin;
         cipher.cipherTextLength = reuslt.cipherTextLength;
-
         tv2.setText(Crypto.decryptAES(cipher, "01234567890123456789012345678901", "5012345678901234"));
     }
 
     public void digest(View view) {
+        for (int i = 0; i < 100000; i++) {
+            if (i % 9 == 0) {
+                Crypto.digest(et.getText().toString(), "md4");
+                continue;
+            }
+            if (i % 2 == 0) {
+                Crypto.digest(et.getText().toString(), "md5");
+                continue;
+            }
+            if (i % 3 == 0) {
+                Crypto.digest(et.getText().toString(), "sha1");
+                continue;
+            }
+            if (i % 4 == 0) {
+                Crypto.digest(et.getText().toString(), "sha128");
+                continue;
+            }
+            if (i % 5 == 0) {
+                Crypto.digest(et.getText().toString(), "sha256");
+                continue;
+            }
+            if (i % 7 == 0) {
+                Crypto.digest(et.getText().toString(), "sha512");
+                continue;
+            }
+        }
         tv1.setText(Crypto.digest(et.getText().toString(), "sha512"));
     }
 }

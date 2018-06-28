@@ -14,7 +14,7 @@
  * @param text
  * @return
  */
-std::string base64::encodestring(const std::string &text) {
+string base64::encodestring(const string &text) {
     EVP_ENCODE_CTX* ectx = EVP_ENCODE_CTX_new();
     int size = text.size() * 2;
     size = size > 64 ? size : 64;
@@ -27,13 +27,13 @@ std::string base64::encodestring(const std::string &text) {
     EVP_EncodeFinal(ectx, out + tlen, &outlen);
     tlen += outlen;
 
-    std::string str((char *) out, tlen);
+    string str((char *) out, tlen);
     free(out);
     EVP_ENCODE_CTX_free(ectx);
     return str;
 }
 
-std::string base64::decodestring(const std::string &text) {
+string base64::decodestring(const string &text) {
     EVP_ENCODE_CTX* ectx = EVP_ENCODE_CTX_new();
     unsigned char *out = (unsigned char *) malloc(text.size());
     int outlen = 0;
@@ -45,7 +45,7 @@ std::string base64::decodestring(const std::string &text) {
     EVP_DecodeFinal(ectx, out + tlen, &outlen);
     tlen += outlen;
 
-    std::string data((char *) out, tlen);
+    string data((char *) out, tlen);
     free(out);
     EVP_ENCODE_CTX_free(ectx);
     return data;
@@ -56,7 +56,7 @@ std::string base64::decodestring(const std::string &text) {
  * @param decoded_bytes
  * @return
  */
-std::string base64::encode(const std::string &decoded_bytes) {
+string base64::encode(const string &decoded_bytes) {
     BIO *bio, *b64;
     BUF_MEM *bufferPtr;
     b64 = BIO_new(BIO_f_base64());
@@ -69,7 +69,7 @@ std::string base64::encode(const std::string &decoded_bytes) {
     BIO_flush(bio);
     BIO_get_mem_ptr(bio, &bufferPtr);
     //这里的第二个参数很重要，必须赋值！否则base64后的字符串长度会出现异常，导致decode的时候末尾会出现一大堆的乱码，
-    std::string result(bufferPtr->data, bufferPtr->length);
+    string result(bufferPtr->data, bufferPtr->length);
     BIO_free_all(bio);
     return result;
 }
@@ -79,7 +79,7 @@ std::string base64::encode(const std::string &decoded_bytes) {
  * @param encoded_bytes
  * @return
  */
-std::string base64::decode(const std::string &encoded_bytes) {
+string base64::decode(const string &encoded_bytes) {
     BIO *bioMem, *b64;
     b64 = BIO_new(BIO_f_base64());
     bioMem = BIO_new_mem_buf((void *) encoded_bytes.c_str(), -1);
@@ -92,7 +92,7 @@ std::string base64::decode(const std::string &encoded_bytes) {
     //填充0
     memset(decode, 0, buffer_length + 1);
     BIO_read(bioMem, (void *) decode, (int) buffer_length);
-    std::string decoded_bytes(decode);
+    string decoded_bytes(decode);
     BIO_free_all(bioMem);
     return decoded_bytes;
 }
@@ -102,10 +102,10 @@ std::string base64::decode(const std::string &encoded_bytes) {
  * @param src_str
  * @return
  */
-std::string base64::encode_hex(const std::string &src_str) {
+string base64::encode_hex(const string &src_str) {
     const static char hex2[] = "0123456789ABCDEF";
     const char *hexp = hex2;
-    std::string dst;
+    string dst;
     dst.assign(src_str.size() * 2, ' ');
     for (size_t i = 0; i < src_str.size(); ++i) {
         unsigned char c = (unsigned char) src_str[i];
