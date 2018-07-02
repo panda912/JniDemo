@@ -11,7 +11,7 @@ using namespace std;
 
 class mydigest {
 public:
-    static string calcDigest(char *message, char *name);
+    static string calcDigest(char *message, char *type);
 
     static string calcFileDigest(char *filePath, char *type);
 };
