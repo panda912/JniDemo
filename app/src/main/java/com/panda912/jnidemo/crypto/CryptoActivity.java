@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -96,10 +94,6 @@ public class CryptoActivity extends AppCompatActivity {
             }
             if (i % 3 == 0) {
                 Crypto.digest(et.getText().toString(), "sha1");
-                continue;
-            }
-            if (i % 4 == 0) {
-                Crypto.digest(et.getText().toString(), "sha128");
                 continue;
             }
             if (i % 5 == 0) {
